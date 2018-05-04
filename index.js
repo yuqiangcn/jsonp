@@ -37,18 +37,20 @@ function noop(){}
  */
 
 function jsonp(url, opts, fn){
+  //opts可选
   if ('function' == typeof opts) {
     fn = opts;
     opts = {};
   }
   if (!opts) opts = {};
-
+  
+  //前缀
   var prefix = opts.prefix || '__jp';
 
-  // use the callback name that was passed if one was provided.
-  // otherwise generate a unique name by incrementing our counter.
+  //回调函数的名字
   var id = opts.name || (prefix + (count++));
-
+  
+  //param (String) 定义回调函数的名字，默认callback
   var param = opts.param || 'callback';
   var timeout = null != opts.timeout ? opts.timeout : 60000;
   var enc = encodeURIComponent;
@@ -60,7 +62,7 @@ function jsonp(url, opts, fn){
   if (timeout) {
     timer = setTimeout(function(){
       cleanup();
-      if (fn) fn(new Error('Timeout'));
+      if (fn) fn(new Error('Timeout')); //超时错误
     }, timeout);
   }
 
