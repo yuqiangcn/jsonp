@@ -47,10 +47,10 @@ function jsonp(url, opts, fn){
   //前缀
   var prefix = opts.prefix || '__jp';
 
-  //回调函数的名字
+  //回调函数的名字，window[id]
   var id = opts.name || (prefix + (count++));
   
-  //param (String) 定义回调函数的名字，默认callback
+  //param (String) 定义回调函数的key名，默认callback
   var param = opts.param || 'callback';
   var timeout = null != opts.timeout ? opts.timeout : 60000;
   var enc = encodeURIComponent;
@@ -78,13 +78,14 @@ function jsonp(url, opts, fn){
     }
   }
 
+  //服务器传回__jp0(各种数据)
   window[id] = function(data){
     debug('jsonp got', data);
     cleanup();
     if (fn) fn(null, data);
   };
 
-  // add qs component
+  // ~-1为0，其它都为非0
   url += (~url.indexOf('?') ? '&' : '?') + param + '=' + enc(id);
   url = url.replace('?&', '?');
 
